@@ -6,6 +6,8 @@ describe("App", () => {
     const app = shallowMount(App);
     const images = app.findAllComponents(ImageToBeCompared);
     expect(images.length).toEqual(2);
+    expect(images.at(0).props("imageId")).toEqual("1a");
+    expect(images.at(1).props("imageId")).toEqual("1b");
   });
   it("displays an image", () => {
     const msg = "new message";

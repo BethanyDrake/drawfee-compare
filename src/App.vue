@@ -4,7 +4,7 @@
     <ImageToBeCompared videoTitle="Artists Draw MORE Disney Characters As Dark Souls Bosses"
     videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" imageId="1a" />
     <ImageToBeCompared videoTitle="Artists Draw MORE Disney Characters As Dark Souls Bosses"
-    videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" imageId="1a" />
+    videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" imageId="1b" />
   </div>
   </div>
 </template>
