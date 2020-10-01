@@ -11,4 +11,20 @@ describe("App", () => {
     const image = app.find("img");
     expect(image.html()).toContain("1a.png");
   });
+  it("includes a link to the video", () => {
+    const msg = "new message";
+    const app = shallowMount(App, {
+      propsData: { msg }
+    });
+
+    const link = app.find("a");
+
+    expect(link.text()).toContain(
+      "Artists Draw MORE Disney Characters As Dark Souls Bosses"
+    );
+
+    expect(link.html()).toContain(
+      "https://www.youtube.com/watch?v=qHNVzpIWDGw"
+    );
+  });
 });
