@@ -1,12 +1,14 @@
 import { shallowMount } from "@vue/test-utils";
-import HelloWorld from "@/components/HelloWorld.vue";
+import App from "@/App.vue";
 
-describe("HelloWorld.vue", () => {
-  it("renders props.msg when passed", () => {
+describe("App", () => {
+  it("displays an image", () => {
     const msg = "new message";
-    const wrapper = shallowMount(HelloWorld, {
+    const app = shallowMount(App, {
       propsData: { msg }
     });
-    expect(wrapper.text()).toMatch(msg);
+
+    const image = app.find("img");
+    expect(image.html()).toContain("1a.png");
   });
 });
