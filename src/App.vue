@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <div id="imageComparisonContainer">
-    <ImageToBeCompared/>
-    <ImageToBeCompared/>
+    <ImageToBeCompared videoTitle="Artists Draw MORE Disney Characters As Dark Souls Bosses"
+    videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" imageId="1a" />
+    <ImageToBeCompared videoTitle="Artists Draw MORE Disney Characters As Dark Souls Bosses"
+    videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" imageId="1a" />
   </div>
   </div>
 </template>
