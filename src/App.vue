@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <p>
-      From episode: <a href="https://www.youtube.com/watch?v=qHNVzpIWDGw">Artists Draw MORE Disney Characters As Dark Souls Bosses</a>
-    </p>
-    <img alt="Vue logo" src="./images/1a.png" />
-  </div>
+    <ImageToBeCompared/>
+    </div>
 </template>
 
 <script>
+  import ImageToBeCompared from "./components/ImageToBeCompared.vue"
 
 export default {
   name: "App",
   components: {
+    ImageToBeCompared
   }
 };
 </script>

@@ -1,10 +1,10 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import App from "@/App.vue";
 
 describe("App", () => {
   it("displays an image", () => {
     const msg = "new message";
-    const app = shallowMount(App, {
+    const app = mount(App, {
       propsData: { msg }
     });
 
@@ -13,7 +13,7 @@ describe("App", () => {
   });
   it("includes a link to the video", () => {
     const msg = "new message";
-    const app = shallowMount(App, {
+    const app = mount(App, {
       propsData: { msg }
     });
 
