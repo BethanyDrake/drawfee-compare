@@ -1,7 +1,10 @@
 <template>
   <div id="app">
+    <div id="imageComparisonContainer">
     <ImageToBeCompared/>
-    </div>
+    <ImageToBeCompared/>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -25,7 +28,11 @@ export default {
   margin-top: 60px;
 }
 
-img {
-  width: 40%;
+#imageComparisonContainer {
+  display: flex;
+}
+
+#imageComparisonContainer img {
+  width: 90%;
 }
 </style>

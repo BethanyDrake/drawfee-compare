@@ -1,7 +1,12 @@
-import { mount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import App from "@/App.vue";
-
+import ImageToBeCompared from "@/components/ImageToBeCompared.vue";
 describe("App", () => {
+  it("displays 2 images to be compared", () => {
+    const app = shallowMount(App);
+    const images = app.findAllComponents(ImageToBeCompared);
+    expect(images.length).toEqual(2);
+  });
   it("displays an image", () => {
     const msg = "new message";
     const app = mount(App, {
