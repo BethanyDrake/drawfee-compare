@@ -1,9 +1,9 @@
 <template>
   <div>
     <p>
-      From episode: <a v-bind:href="videoUrl">{{videoTitle}}</a>
+      From episode: <a v-bind:href="imageData.videoUrl">{{imageData.videoTitle}}</a>
     </p>
-    <img alt="Vue logo" :src="getImgUrl(imageId)" />
+    <img alt="Vue logo" :src="getImgUrl(imageData.id)" />
   </div>
 </template>
 
@@ -27,7 +27,7 @@
 
   export default {
     name: "ImageToBeCompared",
-    props: ['videoUrl', 'videoTitle', 'imageId'],
+    props: ['imageData'],
     components: {
     },
     methods: {

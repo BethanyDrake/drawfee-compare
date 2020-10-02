@@ -1,10 +1,8 @@
 <template>
   <div id="app">
     <div id="imageComparisonContainer">
-    <ImageToBeCompared videoTitle="Artists Draw MORE Disney Characters As Dark Souls Bosses"
-    videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" v-bind:imageId="images[0].imageId" />
-    <ImageToBeCompared videoTitle="Artists Draw MORE Disney Characters As Dark Souls Bosses"
-    videoUrl="https://www.youtube.com/watch?v=qHNVzpIWDGw" v-bind:imageId="images[1].imageId" />
+    <ImageToBeCompared v-bind:imageData='images[0]' />
+    <ImageToBeCompared v-bind:imageData='images[1]' />
   </div>
   </div>
 </template>

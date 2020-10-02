@@ -4,10 +4,19 @@ import ImageToBeCompared from "@/components/ImageToBeCompared.vue";
 describe("App", () => {
   const matchupService = {
     getMatchup: () => {
-      return [{ imageId: "mockId1" }, { imageId: "mockId2" }];
+      return [{ id: "mockId1" }, { id: "mockId2" }];
     }
   };
-  it("displays 2 images to be compared", () => {
+  it("displays both images provided by the matchup service", () => {
+    const image1 = { id: "1" };
+    const image2 = { id: "2" };
+
+    const matchupService = {
+      getMatchup: () => {
+        return [image1, image2];
+      }
+    };
+
     const app = shallowMount(App, {
       propsData: {
         matchupService
@@ -16,8 +25,8 @@ describe("App", () => {
     const images = app.findAllComponents(ImageToBeCompared);
 
     expect(images.length).toEqual(2);
-    expect(images.at(0).props("imageId")).toEqual("mockId1");
-    expect(images.at(1).props("imageId")).toEqual("mockId2");
+    expect(images.at(0).props("imageData")).toEqual(image1);
+    expect(images.at(1).props("imageData")).toEqual(image2);
   });
   it("displays an image", () => {
     const app = mount(App, {

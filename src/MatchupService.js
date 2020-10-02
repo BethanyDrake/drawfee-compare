@@ -1,6 +1,22 @@
 // Register a new service
 
-const images = ["1a", "1b", "1c"];
+const images = [
+  {
+    id: "1a",
+    videoTitle: "Artists Draw MORE Disney Characters As Dark Souls Bosses",
+    videoUrl: "https://www.youtube.com/watch?v=qHNVzpIWDGw"
+  },
+  {
+    id: "1b",
+    videoTitle: "Artists Draw MORE Disney Characters As Dark Souls Bosses",
+    videoUrl: "https://www.youtube.com/watch?v=qHNVzpIWDGw"
+  },
+  {
+    id: "1c",
+    videoTitle: "Artists Draw MORE Disney Characters As Dark Souls Bosses",
+    videoUrl: "https://www.youtube.com/watch?v=qHNVzpIWDGw"
+  }
+];
 
 const randomElement = array => {
   const index = Math.floor(Math.random() * array.length);
@@ -9,10 +25,7 @@ const randomElement = array => {
 
 class MatchupService {
   getMatchup = () => {
-    return [
-      { imageId: randomElement(images) },
-      { imageId: randomElement(images) }
-    ];
+    return [randomElement(images), randomElement(images)];
   };
 }
 
