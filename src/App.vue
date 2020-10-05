@@ -21,6 +21,8 @@
     data.message = imageId +" has 1 votes"
   }
 
+  console.log("TEST_ENV_1: "+ process.env.TEST_ENV_1)
+
   export default {
   name: "App",
   props: ['matchupService'],
