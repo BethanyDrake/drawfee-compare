@@ -4,6 +4,10 @@
       From episode: <a v-bind:href="imageData.videoUrl">{{imageData.videoTitle}}</a>
     </p>
     <img alt="Vue logo" :src="getImgUrl(imageData.id)" />
+    <div>
+      <button v-on:click="onVote">Vote</button>
+    </div>
+
   </div>
 </template>
 
@@ -24,10 +28,17 @@
     return imageContext('./' + id + ".png")
   }
 
-
   export default {
     name: "ImageToBeCompared",
-    props: ['imageData'],
+    props: ['imageData', 'voteForImage'],
+    computed: {
+      onVote() {
+        return () => {
+          this.voteForImage(this.imageData.id)
+        }
+      }
+
+    },
     components: {
     },
     methods: {
