@@ -40,21 +40,65 @@ describe("App", () => {
     expect(buttons.length).toEqual(2);
   });
   describe("when I vote for an image", () => {
-    it("displays how many votes that image has", async () => {
+    it("casts a vote for that image", async () => {
+      const voteService = {
+        voteForImage: jest.fn()
+      };
+
       const app = mount(App, {
         propsData: {
-          matchupService
+          matchupService,
+          voteService
         }
       });
-      const buttons = app.findAll("button");
 
+      const buttons = app.findAll("button");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
-      expect(app.text()).toContain("mockId1 has 1 votes");
 
+      expect(voteService.voteForImage).toBeCalledWith("mockId1", "mockId2");
+    });
+
+    it("casts a vote for the other image", async () => {
+      const voteService = {
+        voteForImage: jest.fn()
+      };
+
+      const app = mount(App, {
+        propsData: {
+          matchupService,
+          voteService
+        }
+      });
+
+      const buttons = app.findAll("button");
       buttons.at(1).trigger("click");
       await Vue.nextTick();
-      expect(app.text()).toContain("mockId2 has 1 votes");
+
+      expect(voteService.voteForImage).toBeCalledWith("mockId2", "mockId1");
+    });
+
+    it("displays how many votes each image has", async () => {
+      const voteService = {
+        voteForImage: async () => {
+          await Promise.resolve();
+          return { mockId1: 3, mockId2: 5 };
+        }
+      };
+      const app = mount(App, {
+        propsData: {
+          matchupService,
+          voteService
+        }
+      });
+
+      const buttons = app.findAll("button");
+      buttons.at(0).trigger("click");
+      await Vue.nextTick();
+      await Vue.nextTick();
+
+      expect(app.text()).toContain("mockId1 has 3 votes");
+      expect(app.text()).toContain("mockId2 has 5 votes");
     });
   });
 });
