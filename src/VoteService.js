@@ -22,7 +22,7 @@ class VoteService {
       }
     });
 
-    xhr.open("POST", "http://localhost:8082/vote");
+    xhr.open("POST", "http://54.206.79.197:8082/vote");
     xhr.setRequestHeader("content-type", "application/json");
     xhr.setRequestHeader(
       "access-control-allow-origin",
