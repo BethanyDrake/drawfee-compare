@@ -24,10 +24,12 @@ class VoteService {
 
     xhr.open("POST", "http://54.206.79.197:8082/vote");
     xhr.setRequestHeader("content-type", "application/json");
-    xhr.setRequestHeader(
-      "access-control-allow-origin",
-      "http://localhost:8081"
+
+    if (
+      window.location.origin === "http://localhost:8081" ||
+      window.location.origin === "https://drawfee-compare.vercel.app"
     );
+    xhr.setRequestHeader("access-control-allow-origin", window.location.origin);
     xhr.setRequestHeader("cache-control", "no-cache");
 
     xhr.send(body);
