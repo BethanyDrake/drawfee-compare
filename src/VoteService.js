@@ -22,7 +22,7 @@ class VoteService {
       }
     });
 
-    xhr.open("POST", "http://54.206.79.197:8082/vote");
+    xhr.open("POST", "https://mysterious-brushlands-23515.herokuapp.com/vote");
     xhr.setRequestHeader("content-type", "application/json");
 
     if (
