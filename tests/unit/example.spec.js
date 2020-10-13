@@ -167,6 +167,23 @@ describe("App", () => {
         2
       );
     });
-    it("hides the next button again", () => {});
+    it("hides the next button again", async () => {
+      expect(app.text()).toContain("Next");
+      app
+        .findAll("button")
+        .at(2)
+        .trigger("click");
+      await Vue.nextTick();
+      expect(app.text()).not.toContain("Next");
+    });
+    it("hides the results again", async () => {
+      expect(app.text()).toContain("votes");
+      app
+        .findAll("button")
+        .at(2)
+        .trigger("click");
+      await Vue.nextTick();
+      expect(app.text()).not.toContain("votes");
+    });
   });
 });

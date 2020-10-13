@@ -29,7 +29,6 @@
       }
     },
     created: function() {
-      console.log("BBBB")
       if (this.injectedMatchupService) {
         console.log("updating matchup")
         this.$set(this, 'matchupService', this.injectedMatchupService)
@@ -51,6 +50,8 @@
       nextMatchup: function() {
         console.log("NEXT")
         this.$set(this, 'images', this.matchupService.getMatchup())
+        this.$set(this, 'hasVoted', false)
+        this.$set(this, 'message', "")
       }
     },
     components: {
