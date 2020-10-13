@@ -1,34 +1,12 @@
 import { mount, shallowMount } from "@vue/test-utils";
 import App from "@/App.vue";
 import Vue from "vue";
-import ImageToBeCompared from "@/components/ImageToBeCompared.vue";
 describe("App", () => {
   const matchupService = {
     getMatchup: () => {
       return [{ id: "mockId1" }, { id: "mockId2" }];
     }
   };
-  it("displays both images provided by the matchup service", () => {
-    const image1 = { id: "1" };
-    const image2 = { id: "2" };
-
-    const matchupService = {
-      getMatchup: () => {
-        return [image1, image2];
-      }
-    };
-
-    const app = shallowMount(App, {
-      propsData: {
-        injectedMatchupService: matchupService
-      }
-    });
-    const images = app.findAllComponents(ImageToBeCompared);
-
-    expect(images.length).toEqual(2);
-    expect(images.at(0).props("imageData")).toEqual(image1);
-    expect(images.at(1).props("imageData")).toEqual(image2);
-  });
 
   it("has two 'vote' buttons", () => {
     const app = mount(App, {
@@ -155,17 +133,13 @@ describe("App", () => {
     });
 
     it("displays a new set of images", async () => {
-      expect(app.findComponent(ImageToBeCompared).props().imageData.id).toEqual(
-        1
-      );
+      expect(app.find("img").html()).toContain("1.png");
       app
         .findAll("button")
         .at(2)
         .trigger("click");
       await Vue.nextTick();
-      expect(app.findComponent(ImageToBeCompared).props().imageData.id).toEqual(
-        2
-      );
+      expect(app.find("img").html()).toContain("2.png");
     });
     it("hides the next button again", async () => {
       expect(app.text()).toContain("Next");
@@ -184,6 +158,41 @@ describe("App", () => {
         .trigger("click");
       await Vue.nextTick();
       expect(app.text()).not.toContain("votes");
+    });
+  });
+
+  describe("Image details", () => {
+    const matchupService = {
+      getMatchup: () => {
+        return [
+          { id: "mockId1", videoTitle: "Title 1", videoUrl: "link-1" },
+          { id: "mockId2", videoTitle: "Title 2", videoUrl: "link-2" }
+        ];
+      }
+    };
+
+    let app;
+    beforeEach(() => {
+      app = mount(App, {
+        propsData: {
+          injectedMatchupService: matchupService
+        }
+      });
+    });
+
+    it("displays the images", () => {
+      const images = app.findAll("img");
+      expect(images.at(0).html()).toContain("mockId1.png");
+      expect(images.at(1).html()).toContain("mockId2.png");
+    });
+    it("includes links to the videos", () => {
+      const links = app.findAll("a");
+
+      expect(links.at(0).text()).toContain("Title 1");
+      expect(links.at(0).html()).toContain("link-1");
+
+      expect(links.at(1).text()).toContain("Title 2");
+      expect(links.at(1).html()).toContain("link-2");
     });
   });
 });
