@@ -100,5 +100,28 @@ describe("App", () => {
       expect(app.text()).toContain("mockId1 has 3 votes");
       expect(app.text()).toContain("mockId2 has 5 votes");
     });
+
+    it("displays the 'next' button", async () => {
+      const voteService = {
+        voteForImage: async () => {
+          await Promise.resolve();
+          return { mockId1: 3, mockId2: 5 };
+        }
+      };
+      const app = mount(App, {
+        propsData: {
+          matchupService,
+          voteService
+        }
+      });
+      expect(app.text()).not.toContain("Next");
+
+      const buttons = app.findAll("button");
+      buttons.at(0).trigger("click");
+
+      await Vue.nextTick();
+      await Vue.nextTick();
+      expect(app.text()).toContain("Next");
+    });
   });
 });

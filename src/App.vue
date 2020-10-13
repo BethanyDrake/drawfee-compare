@@ -8,6 +8,7 @@
     <p>
       {{message}}
     </p>
+    <button v-if='hasVoted'>Next</button>
   </div>
 </template>
 
@@ -15,14 +16,16 @@
   import ImageToBeCompared from "./components/ImageToBeCompared.vue"
   import MatchupService from "./MatchupService.js"
   import VoteService from "./VoteService.js"
-  const data = {
-    message: ""
-  }
 
   export default {
     name: "App",
     props: ['matchupService', 'voteService'],
-    data: () => data,
+    data: function() {
+      return {
+          message: "",
+          hasVoted: false,
+      }
+    },
     computed: {
       images() {
         const matchupService = this.matchupService || new MatchupService();
@@ -32,7 +35,9 @@
         const voteService = this.voteService || new VoteService();
         return (winner, loser) => async () => {
           let votes = await voteService.voteForImage(winner.id, loser.id );
-          data.message = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
+          this.$set(this, 'hasVoted', true)
+          const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
+          this.$set(this, 'message', newMessage)
         }
       }
     },
