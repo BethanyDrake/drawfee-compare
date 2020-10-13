@@ -1,35 +1,40 @@
 <template>
   <div id="app">
     <div id="imageComparisonContainer">
-      <div>
-        <p>
+      <div class="row">
+        <p class="rowItem">
           From episode: <a v-bind:href="images[0].videoUrl">{{images[0].videoTitle}}</a>
-        </p>
-        <img alt="Vue logo" :src="getImgUrl(images[0].id)" />
-        <div>
-          <button v-on:click="voteForImage(0)">Vote</button>
-        </div>
-
-      </div>
-
-      <div>
-        <p>
+        </p >
+        <p class="rowItem">
           From episode: <a v-bind:href="images[1].videoUrl">{{images[1].videoTitle}}</a>
         </p>
-        <img alt="Vue logo" :src="getImgUrl(images[1].id)" />
-        <div>
-          <button v-on:click="voteForImage(1)">Vote</button>
-        </div>
-
       </div>
-
+      <div class="row">
+        <div class="rowItem">
+          <img alt="Vue logo" :src="getImgUrl(images[0].id)" />
+        </div>
+        <div class="rowItem">
+          <img alt="Vue logo" :src="getImgUrl(images[1].id)" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+        <button v-on:click="voteForImage(1)">Vote</button>
+      </div>
+        <div class="rowItem">
+        <button v-on:click="voteForImage(0)">Vote</button>
+      </div>
+      </div>
 
     </div>
 
-    <p>
-      {{message}}
-    </p>
-    <button v-if='hasVoted' v-on:click='nextMatchup'>Next</button>
+
+
+
+  <p>
+    {{message}}
+  </p>
+  <button v-if='hasVoted' v-on:click='nextMatchup'>Next</button>
   </div>
 </template>
 
@@ -100,8 +105,21 @@
     margin-top: 60px;
   }
 
+
   #imageComparisonContainer {
     display: flex;
+    flex-direction: column;
+    margin: 0 16px;
+  }
+
+  .row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  .rowItem{
+    width: 50%;
   }
 
   #imageComparisonContainer img {
