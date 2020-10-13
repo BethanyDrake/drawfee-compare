@@ -20,7 +20,7 @@ describe("App", () => {
 
     const app = shallowMount(App, {
       propsData: {
-        matchupService
+        injectedMatchupService: matchupService
       }
     });
     const images = app.findAllComponents(ImageToBeCompared);
@@ -33,7 +33,7 @@ describe("App", () => {
   it("has two 'vote' buttons", () => {
     const app = mount(App, {
       propsData: {
-        matchupService
+        injectedMatchupService: matchupService
       }
     });
     const buttons = app.findAll("button");
@@ -47,7 +47,7 @@ describe("App", () => {
 
       const app = mount(App, {
         propsData: {
-          matchupService,
+          injectedMatchupService: matchupService,
           voteService
         }
       });
@@ -66,7 +66,7 @@ describe("App", () => {
 
       const app = mount(App, {
         propsData: {
-          matchupService,
+          injectedMatchupService: matchupService,
           voteService
         }
       });
@@ -87,7 +87,7 @@ describe("App", () => {
       };
       const app = mount(App, {
         propsData: {
-          matchupService,
+          injectedMatchupService: matchupService,
           voteService
         }
       });
@@ -110,7 +110,7 @@ describe("App", () => {
       };
       const app = mount(App, {
         propsData: {
-          matchupService,
+          injectedMatchupService: matchupService,
           voteService
         }
       });
@@ -123,5 +123,50 @@ describe("App", () => {
       await Vue.nextTick();
       expect(app.text()).toContain("Next");
     });
+  });
+  describe("when I vote for an image then click next", () => {
+    let app;
+    beforeEach(async () => {
+      const voteService = {
+        voteForImage: async () => {
+          await Promise.resolve();
+          return { mockId1: 3, mockId2: 5 };
+        }
+      };
+      let matchupServiceCalls = 0;
+      const matchupService = {
+        getMatchup: () => {
+          matchupServiceCalls++;
+          return [{ id: matchupServiceCalls }, { id: matchupServiceCalls }];
+        }
+      };
+      app = mount(App, {
+        propsData: {
+          injectedMatchupService: matchupService,
+          voteService
+        }
+      });
+      expect(app.text()).not.toContain("Next");
+
+      const buttons = app.findAll("button");
+      buttons.at(0).trigger("click");
+      await Vue.nextTick();
+      await Vue.nextTick();
+    });
+
+    it("displays a new set of images", async () => {
+      expect(app.findComponent(ImageToBeCompared).props().imageData.id).toEqual(
+        1
+      );
+      app
+        .findAll("button")
+        .at(2)
+        .trigger("click");
+      await Vue.nextTick();
+      expect(app.findComponent(ImageToBeCompared).props().imageData.id).toEqual(
+        2
+      );
+    });
+    it("hides the next button again", () => {});
   });
 });

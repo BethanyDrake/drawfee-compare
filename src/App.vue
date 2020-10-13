@@ -8,7 +8,7 @@
     <p>
       {{message}}
     </p>
-    <button v-if='hasVoted'>Next</button>
+    <button v-if='hasVoted' v-on:click='nextMatchup'>Next</button>
   </div>
 </template>
 
@@ -19,18 +19,24 @@
 
   export default {
     name: "App",
-    props: ['matchupService', 'voteService'],
+    props: ['injectedMatchupService', 'voteService'],
     data: function() {
       return {
           message: "",
           hasVoted: false,
+          images: [],
+          matchupService: new MatchupService(),
       }
     },
+    created: function() {
+      console.log("BBBB")
+      if (this.injectedMatchupService) {
+        console.log("updating matchup")
+        this.$set(this, 'matchupService', this.injectedMatchupService)
+      }
+      this.$set(this, 'images', this.matchupService.getMatchup())
+    },
     computed: {
-      images() {
-        const matchupService = this.matchupService || new MatchupService();
-        return matchupService.getMatchup();
-      },
       voteForImage() {
         const voteService = this.voteService || new VoteService();
         return (winner, loser) => async () => {
@@ -39,6 +45,12 @@
           const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
           this.$set(this, 'message', newMessage)
         }
+      }
+    },
+    methods: {
+      nextMatchup: function() {
+        console.log("NEXT")
+        this.$set(this, 'images', this.matchupService.getMatchup())
       }
     },
     components: {
