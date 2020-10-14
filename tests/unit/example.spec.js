@@ -210,7 +210,19 @@ describe("App", () => {
       expect(buttons.at(0).html()).not.toContain("disabled");
       expect(buttons.at(1).html()).not.toContain("disabled");
     });
-    it("displays a loding spinner", () => {});
+    it("displays a loding spinner", async () => {
+      expect(app.find(".loadingSpinner").exists()).toBeFalsy();
+      app
+        .findAll("button")
+        .at(0)
+        .trigger("click");
+      await Vue.nextTick();
+      expect(app.find(".loadingSpinner").exists()).toBeTruthy();
+      finishVoting(voteServiceResult);
+      await Vue.nextTick();
+      await Vue.nextTick();
+      expect(app.find(".loadingSpinner").exists()).toBeFalsy();
+    });
   });
 
   describe("Image details", () => {

@@ -28,13 +28,13 @@
         <button class="voteButton"  :disabled='voteSubmitted' v-on:click="voteForImage(1)">Vote</button>
       </div>
       </div>
-
     </div>
+    <div class="loadingSpinner" v-if="voteSubmitted && !voteRecieved">loaading</div>
 
   <p>
     {{message}}
   </p>
-  <button v-if='hasVoted' v-on:click='nextMatchup'>Next</button>
+  <button v-if='voteRecieved' v-on:click='nextMatchup'>Next</button>
   </div>
 </template>
 
@@ -48,10 +48,10 @@
     data: function () {
       return {
         message: "",
-        hasVoted: false,
         images: [],
         matchupService: new MatchupService(),
         voteSubmitted: false,
+        voteRecieved: false,
       }
     },
     created: function () {
@@ -65,8 +65,8 @@
     methods: {
       nextMatchup: function () {
         this.$set(this, 'images', this.matchupService.getMatchup())
-        this.$set(this, 'hasVoted', false)
         this.$set(this, 'voteSubmitted', false)
+        this.$set(this, 'voteRecieved', false)
         this.$set(this, 'message', "")
       },
       voteForImage: async function (imageIndex) {
@@ -76,7 +76,7 @@
 
         this.$set(this, 'voteSubmitted', true)
         const votes = await voteService.voteForImage(winner.id, loser.id);
-        this.$set(this, 'hasVoted', true)
+        this.$set(this, 'voteRecieved', true)
         const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
         this.$set(this, 'message', newMessage)
 
