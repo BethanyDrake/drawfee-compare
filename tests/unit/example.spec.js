@@ -257,6 +257,37 @@ describe("App", () => {
     });
   });
 
+  describe("when voting is successful", () => {
+    let app;
+    beforeEach(async () => {
+      const voteService = {
+        voteForImage: () => {
+          return Promise.resolve({ mockId1: 3, mockId2: 7 });
+        }
+      };
+      app = mount(App, {
+        propsData: {
+          injectedMatchupService: matchupService,
+          voteService
+        }
+      });
+
+      const buttons = app.findAll("button");
+      buttons.at(0).trigger("click");
+      await Vue.nextTick();
+      await Vue.nextTick();
+    });
+
+    it("displays the next button", () => {
+      expect(app.text()).toContain("Next");
+    });
+    it("displays the percentage of people that voted for each image", () => {
+      const voteButtons = app.findAll(".voteButton");
+      expect(voteButtons.at(0).text()).toContain("30%");
+      expect(voteButtons.at(1).text()).toContain("70%");
+    });
+  });
+
   describe("Image details", () => {
     const matchupService = {
       getMatchup: () => {

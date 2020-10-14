@@ -22,10 +22,10 @@
       </div>
       <div class="row voteButtonRow">
         <div class="rowItem">
-          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(0)">Vote</button>
+          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(0)">{{voteButtonText[0]}}</button>
         </div>
         <div class="rowItem">
-          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(1)">Vote</button>
+          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(1)">{{voteButtonText[1]}}</button>
         </div>
       </div>
     </div>
@@ -46,6 +46,17 @@
   import MatchupService from "./MatchupService.js"
   import VoteService from "./VoteService.js"
 
+
+  const formatPercentage = (n) => {
+    return (n*100).toFixed(0) + "%"
+  }
+
+  const calculateWinPercentages = (id1, id2, votes) => {
+    const totalVotes = votes[id1] + votes[id2];
+    return [formatPercentage(votes[id1]/totalVotes), formatPercentage(votes[id2]/totalVotes)]
+
+  }
+
   export default {
     name: "App",
     props: ['injectedMatchupService', 'voteService'],
@@ -56,6 +67,7 @@
         matchupService: new MatchupService(),
         voteSubmitted: false,
         voteRecieved: false,
+        voteButtonText: ["Vote", "Vote"],
       }
     },
     created: function () {
@@ -72,6 +84,7 @@
         this.$set(this, 'voteSubmitted', false)
         this.$set(this, 'voteRecieved', false)
         this.$set(this, 'message', "")
+        this.$set(this, 'voteButtonText', ["Vote", "Vote"])
       },
       voteForImage: async function (imageIndex) {
         const voteService = this.voteService || new VoteService();
@@ -82,8 +95,10 @@
         voteService.voteForImage(winner.id, loser.id).then(votes => {
           this.$set(this, 'voteRecieved', true)
           const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
+          this.$set(this, 'voteButtonText', calculateWinPercentages(this.images[0].id, this.images[1].id, votes));
           this.$set(this, 'message', newMessage)
-        }).catch(() => {
+        }).catch((e) => {
+          console.error(e)
           console.log("Could not submit vote.")
           this.$set(this, 'voteRecieved', false);
           this.$set(this, 'voteSubmitted', false);
