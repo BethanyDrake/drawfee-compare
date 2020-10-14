@@ -161,6 +161,58 @@ describe("App", () => {
     });
   });
 
+  describe("while the vote is being processed", () => {
+    let app;
+    let finishVoting;
+    const voteServiceResult = { mockId1: 3, mockId2: 5 };
+    beforeEach(async () => {
+      const voteService = {
+        voteForImage: async () => {
+          const promise = new Promise(resolve => {
+            finishVoting = resolve;
+          });
+          return promise;
+        }
+      };
+      let matchupServiceCalls = 0;
+      const matchupService = {
+        getMatchup: () => {
+          matchupServiceCalls++;
+          return [{ id: matchupServiceCalls }, { id: matchupServiceCalls }];
+        }
+      };
+      app = mount(App, {
+        propsData: {
+          injectedMatchupService: matchupService,
+          voteService
+        }
+      });
+    });
+
+    it("disables vote buttons, which don't enable until the next button is pressed", async () => {
+      const buttons = app.findAll("button");
+      expect(buttons.at(0).html()).not.toContain("disabled");
+      expect(buttons.at(1).html()).not.toContain("disabled");
+      buttons.at(0).trigger("click");
+      await Vue.nextTick();
+      expect(buttons.at(0).html()).toContain("disabled");
+      expect(buttons.at(1).html()).toContain("disabled");
+      finishVoting(voteServiceResult);
+      await Vue.nextTick();
+      await Vue.nextTick();
+      expect(buttons.at(0).html()).toContain("disabled");
+      expect(buttons.at(1).html()).toContain("disabled");
+      app
+        .findAll("button")
+        .at(2)
+        .trigger("click");
+      await Vue.nextTick();
+      expect(buttons.at(0).html()).not.toContain("disabled");
+      expect(buttons.at(1).html()).not.toContain("disabled");
+    });
+    it("displays a loding spinner", () => {});
+  });
+
   describe("Image details", () => {
     const matchupService = {
       getMatchup: () => {

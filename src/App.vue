@@ -22,17 +22,14 @@
       </div>
       <div class="row voteButtonRow">
         <div class="rowItem">
-        <button class="voteButton" v-on:click="voteForImage(0)">Vote</button>
+        <button class="voteButton"  :disabled='voteSubmitted' v-on:click="voteForImage(0)">Vote</button>
       </div>
         <div class="rowItem">
-        <button class="voteButton" v-on:click="voteForImage(1)">Vote</button>
+        <button class="voteButton"  :disabled='voteSubmitted' v-on:click="voteForImage(1)">Vote</button>
       </div>
       </div>
 
     </div>
-
-
-
 
   <p>
     {{message}}
@@ -54,6 +51,7 @@
         hasVoted: false,
         images: [],
         matchupService: new MatchupService(),
+        voteSubmitted: false,
       }
     },
     created: function () {
@@ -68,6 +66,7 @@
       nextMatchup: function () {
         this.$set(this, 'images', this.matchupService.getMatchup())
         this.$set(this, 'hasVoted', false)
+        this.$set(this, 'voteSubmitted', false)
         this.$set(this, 'message', "")
       },
       voteForImage: async function (imageIndex) {
@@ -75,6 +74,7 @@
         const winner = this.images[imageIndex]
         const loser = this.images[(imageIndex + 1) % 2]
 
+        this.$set(this, 'voteSubmitted', true)
         const votes = await voteService.voteForImage(winner.id, loser.id);
         this.$set(this, 'hasVoted', true)
         const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
@@ -145,6 +145,16 @@
   border-width: 4px;
    border-style: solid;
    border-color: white;
+ }
+ .voteButton:disabled {
+  background-color: grey;
+  border-color: white;
+  color: white;
+ }
+ .voteButton:disabled:hover {
+  background-color: grey;
+  border-color: white;
+  color: white;
  }
  .voteButton:hover {
    background-color: white;
