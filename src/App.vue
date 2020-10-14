@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <h1>
+      Drawfee Royale
+    </h1>
     <div id="imageComparisonContainer">
       <div class="row">
         <p class="rowItem">
@@ -19,10 +22,10 @@
       </div>
       <div class="row">
         <div class="rowItem">
-        <button v-on:click="voteForImage(1)">Vote</button>
+        <button class="voteButton" v-on:click="voteForImage(1)">Vote</button>
       </div>
         <div class="rowItem">
-        <button v-on:click="voteForImage(0)">Vote</button>
+        <button class="voteButton" v-on:click="voteForImage(0)">Vote</button>
       </div>
       </div>
 
@@ -96,20 +99,64 @@
 </script>
 
 <style>
+@font-face {
+  font-family: "FlamanteSans";
+  src: local("FlamanteSans"),
+   url(./fonts/FlamanteSans/Flamante-Sans-Bold-FFP.ttf) format("truetype");
+}
+
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
   }
 
+  body {
+    margin: 0;
+  }
 
+ h1 {
+   background-color: #C01F26;
+   color: white;
+   margin: 0;
+   padding: 16px;
+   padding-top: 32px;
+   text-transform: uppercase;
+   letter-spacing: 2px;
+   font-family: "FlamanteSans";
+   font-size: xxx-large;
+ }
+
+ .voteButton {
+  background-color: #C01F26;
+  padding: 16px 32px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: large;
+  border-width: 4px;
+   border-style: solid;
+   border-color: white;
+ }
+ .voteButton:hover {
+   background-color: white;
+   color:#C01F26;
+   border-width: 4px;
+   border-style: solid;
+   border-color: #C01F26;
+ }
+ .voteButton:focus {
+   outline-color: #C01F26;
+ }
   #imageComparisonContainer {
     display: flex;
     flex-direction: column;
     margin: 0 16px;
+
   }
 
   .row {
