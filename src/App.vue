@@ -20,7 +20,7 @@
           <img alt="Vue logo" :src="getImgUrl(images[1].id)" />
         </div>
       </div>
-      <div class="row">
+      <div class="row voteButtonRow">
         <div class="rowItem">
         <button class="voteButton" v-on:click="voteForImage(1)">Vote</button>
       </div>
@@ -128,6 +128,10 @@
    letter-spacing: 2px;
    font-family: "FlamanteSans";
    font-size: xxx-large;
+ }
+
+ .voteButtonRow {
+   margin-top: -32px;
  }
 
  .voteButton {
