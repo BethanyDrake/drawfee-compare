@@ -1,8 +1,10 @@
 class VoteService {
   voteForImage = (winner, loser) => {
     let resolve;
-    const promise = new Promise(res => {
+    let reject;
+    const promise = new Promise((res, rej) => {
       resolve = res;
+      reject = rej;
     });
 
     console.log("voting for image: " + winner);
@@ -16,9 +18,12 @@ class VoteService {
 
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
-        console.log("response!");
-        console.log(this.responseText);
-        resolve(JSON.parse(this.responseText));
+        try {
+          const parsedResponse = JSON.parse(this.responseText);
+          resolve(parsedResponse);
+        } catch {
+          reject();
+        }
       }
     });
 

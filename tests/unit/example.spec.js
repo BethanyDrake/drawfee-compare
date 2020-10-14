@@ -161,6 +161,38 @@ describe("App", () => {
     });
   });
 
+  describe("when voting fails", () => {
+    let app;
+    beforeEach(async () => {
+      const voteService = {
+        voteForImage: () => {
+          return Promise.reject();
+        }
+      };
+      let matchupServiceCalls = 0;
+      const matchupService = {
+        getMatchup: () => {
+          matchupServiceCalls++;
+          return [{ id: matchupServiceCalls }, { id: matchupServiceCalls }];
+        }
+      };
+      app = mount(App, {
+        propsData: {
+          injectedMatchupService: matchupService,
+          voteService
+        }
+      });
+    });
+    it("enables the vote buttons and hides the success spinner", async () => {
+      const buttons = app.findAll("button");
+      buttons.at(0).trigger("click");
+      await Vue.nextTick();
+      expect(buttons.at(0).html()).not.toContain("disabled");
+      expect(buttons.at(1).html()).not.toContain("disabled");
+      expect(app.find(".loadingSpinner").exists()).toBeFalsy();
+    });
+  });
+
   describe("while the vote is being processed", () => {
     let app;
     let finishVoting;

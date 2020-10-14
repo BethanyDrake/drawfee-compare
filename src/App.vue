@@ -7,7 +7,7 @@
       <div class="row">
         <p class="rowItem">
           From episode: <a v-bind:href="images[0].videoUrl">{{images[0].videoTitle}}</a>
-        </p >
+        </p>
         <p class="rowItem">
           From episode: <a v-bind:href="images[1].videoUrl">{{images[1].videoTitle}}</a>
         </p>
@@ -22,23 +22,23 @@
       </div>
       <div class="row voteButtonRow">
         <div class="rowItem">
-        <button class="voteButton"  :disabled='voteSubmitted' v-on:click="voteForImage(0)">Vote</button>
-      </div>
+          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(0)">Vote</button>
+        </div>
         <div class="rowItem">
-        <button class="voteButton"  :disabled='voteSubmitted' v-on:click="voteForImage(1)">Vote</button>
-      </div>
+          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(1)">Vote</button>
+        </div>
       </div>
     </div>
     <div class="loadingSpinner" v-if="voteSubmitted && !voteRecieved">
-       <div>
-      <img class="spinning" src="./assets/drawfee-logo.png"/>
-      <p id="submittingVoteText">Submitting vote...</p>
-    </div>
+      <div>
+        <img class="spinning" src="./assets/drawfee-logo.png" />
+        <p id="submittingVoteText">Submitting vote...</p>
       </div>
-  <p>
-    {{message}}
-  </p>
-  <button v-if='voteRecieved' v-on:click='nextMatchup'>Next</button>
+    </div>
+    <p>
+      {{message}}
+    </p>
+    <button v-if='voteRecieved' v-on:click='nextMatchup'>Next</button>
   </div>
 </template>
 
@@ -79,10 +79,16 @@
         const loser = this.images[(imageIndex + 1) % 2]
 
         this.$set(this, 'voteSubmitted', true)
-        const votes = await voteService.voteForImage(winner.id, loser.id);
-        this.$set(this, 'voteRecieved', true)
-        const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
-        this.$set(this, 'message', newMessage)
+        voteService.voteForImage(winner.id, loser.id).then(votes => {
+          this.$set(this, 'voteRecieved', true)
+          const newMessage = winner.id + " has " + votes[winner.id] + " votes" + " ... " + loser.id + " has " + votes[loser.id] + " votes";
+          this.$set(this, 'message', newMessage)
+        }).catch(() => {
+          console.log("Could not submit vote.")
+          this.$set(this, 'voteRecieved', false);
+          this.$set(this, 'voteSubmitted', false);
+        })
+
 
       },
       getImgUrl: (id) => {
@@ -103,11 +109,11 @@
 </script>
 
 <style>
-@font-face {
-  font-family: "FlamanteSans";
-  src: local("FlamanteSans"),
-   url(./fonts/FlamanteSans/Flamante-Sans-Bold-FFP.ttf) format("truetype");
-}
+  @font-face {
+    font-family: "FlamanteSans";
+    src: local("FlamanteSans"),
+      url(./fonts/FlamanteSans/Flamante-Sans-Bold-FFP.ttf) format("truetype");
+  }
 
 
   #app {
@@ -122,54 +128,59 @@
     margin: 0;
   }
 
- h1 {
-   background-color: #C01F26;
-   color: white;
-   margin: 0;
-   padding: 16px;
-   padding-top: 32px;
-   text-transform: uppercase;
-   letter-spacing: 2px;
-   font-family: "FlamanteSans";
-   font-size: xxx-large;
- }
+  h1 {
+    background-color: #C01F26;
+    color: white;
+    margin: 0;
+    padding: 16px;
+    padding-top: 32px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: "FlamanteSans";
+    font-size: xxx-large;
+  }
 
- .voteButtonRow {
-   margin-top: -32px;
- }
+  .voteButtonRow {
+    margin-top: -32px;
+  }
 
- .voteButton {
-  background-color: #C01F26;
-  padding: 16px 32px;
-  border-radius: 8px;
-  color: white;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: large;
-  border-width: 4px;
-   border-style: solid;
-   border-color: white;
- }
- .voteButton:disabled {
-  background-color: grey;
-  border-color: white;
-  color: white;
- }
- .voteButton:disabled:hover {
-  background-color: grey;
-  border-color: white;
-  color: white;
- }
- .voteButton:hover {
-   background-color: white;
-   color:#C01F26;
-   border-width: 4px;
-   border-style: solid;
-   border-color: #C01F26;
- }
- .voteButton:focus {
-   outline-color: #C01F26;
- }
+  button {
+    background-color: #C01F26;
+    padding: 16px 32px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: large;
+    border-width: 4px;
+    border-style: solid;
+    border-color: white;
+  }
+
+  button:disabled {
+    background-color: grey;
+    border-color: white;
+    color: white;
+  }
+
+  button:disabled:hover {
+    background-color: grey;
+    border-color: white;
+    color: white;
+  }
+
+  button:hover {
+    background-color: white;
+    color: #C01F26;
+    border-width: 4px;
+    border-style: solid;
+    border-color: #C01F26;
+  }
+
+  .voteButton:focus {
+    outline-color: #C01F26;
+  }
+
   #imageComparisonContainer {
     display: flex;
     flex-direction: column;
@@ -184,11 +195,16 @@
     z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(199, 199, 199, 0.829); /* Black w/ opacity */
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(199, 199, 199, 0.829);
+    /* Black w/ opacity */
     justify-content: center;
   }
 
@@ -199,14 +215,30 @@
   }
 
   .spinning {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
   }
-    /* rotate 360 key for refresh btn */
-  @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-  @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-  @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+  /* rotate 360 key for refresh btn */
+  @-moz-keyframes spin {
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
 
   .row {
     display: flex;
@@ -214,7 +246,7 @@
     align-items: center;
   }
 
-  .rowItem{
+  .rowItem {
     width: 50%;
   }
 
