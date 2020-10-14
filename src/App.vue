@@ -22,10 +22,10 @@
       </div>
       <div class="row voteButtonRow">
         <div class="rowItem">
-        <button class="voteButton" v-on:click="voteForImage(1)">Vote</button>
+        <button class="voteButton" v-on:click="voteForImage(0)">Vote</button>
       </div>
         <div class="rowItem">
-        <button class="voteButton" v-on:click="voteForImage(0)">Vote</button>
+        <button class="voteButton" v-on:click="voteForImage(1)">Vote</button>
       </div>
       </div>
 
