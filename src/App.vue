@@ -29,8 +29,12 @@
       </div>
       </div>
     </div>
-    <div class="loadingSpinner" v-if="voteSubmitted && !voteRecieved">loaading</div>
-
+    <div class="loadingSpinner" v-if="voteSubmitted && !voteRecieved">
+       <div>
+      <img class="spinning" src="./assets/drawfee-logo.png"/>
+      <p id="submittingVoteText">Submitting vote...</p>
+    </div>
+      </div>
   <p>
     {{message}}
   </p>
@@ -172,6 +176,37 @@
     margin: 0 16px;
 
   }
+
+  .loadingSpinner {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(199, 199, 199, 0.829); /* Black w/ opacity */
+    justify-content: center;
+  }
+
+  #submittingVoteText {
+    font-size: large;
+    color: #C01F26;
+    font-weight: bold;
+  }
+
+  .spinning {
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+  }
+    /* rotate 360 key for refresh btn */
+  @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+  @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+  @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
   .row {
     display: flex;
