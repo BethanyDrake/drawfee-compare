@@ -1,7 +1,7 @@
-import { mount, shallowMount } from "@vue/test-utils";
-import App from "@/App.vue";
+import { mount } from "@vue/test-utils";
+import VotingPage from "@/VotingPage.vue";
 import Vue from "vue";
-describe("App", () => {
+describe("VotingPage", () => {
   const matchupService = {
     getMatchup: () => {
       return [{ id: "mockId1" }, { id: "mockId2" }];
@@ -9,12 +9,12 @@ describe("App", () => {
   };
 
   it("has two 'vote' buttons", () => {
-    const app = mount(App, {
+    const page = mount(VotingPage, {
       propsData: {
         injectedMatchupService: matchupService
       }
     });
-    const buttons = app.findAll("button");
+    const buttons = page.findAll("button");
     expect(buttons.length).toEqual(2);
   });
   describe("when I vote for an image", () => {
@@ -23,14 +23,14 @@ describe("App", () => {
         voteForImage: jest.fn()
       };
 
-      const app = mount(App, {
+      const page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
         }
       });
 
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
 
@@ -42,14 +42,14 @@ describe("App", () => {
         voteForImage: jest.fn()
       };
 
-      const app = mount(App, {
+      const page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
         }
       });
 
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(1).trigger("click");
       await Vue.nextTick();
 
@@ -63,20 +63,20 @@ describe("App", () => {
           return { mockId1: 3, mockId2: 5 };
         }
       };
-      const app = mount(App, {
+      const page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
         }
       });
 
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       await Vue.nextTick();
 
-      expect(app.text()).toContain("mockId1 has 3 votes");
-      expect(app.text()).toContain("mockId2 has 5 votes");
+      expect(page.text()).toContain("mockId1 has 3 votes");
+      expect(page.text()).toContain("mockId2 has 5 votes");
     });
 
     it("displays the 'next' button", async () => {
@@ -86,24 +86,24 @@ describe("App", () => {
           return { mockId1: 3, mockId2: 5 };
         }
       };
-      const app = mount(App, {
+      const page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
         }
       });
-      expect(app.text()).not.toContain("Next");
+      expect(page.text()).not.toContain("Next");
 
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(0).trigger("click");
 
       await Vue.nextTick();
       await Vue.nextTick();
-      expect(app.text()).toContain("Next");
+      expect(page.text()).toContain("Next");
     });
   });
   describe("when I vote for an image then click next", () => {
-    let app;
+    let page;
     beforeEach(async () => {
       const voteService = {
         voteForImage: async () => {
@@ -118,51 +118,51 @@ describe("App", () => {
           return [{ id: matchupServiceCalls }, { id: matchupServiceCalls }];
         }
       };
-      app = mount(App, {
+      page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
         }
       });
-      expect(app.text()).not.toContain("Next");
+      expect(page.text()).not.toContain("Next");
 
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       await Vue.nextTick();
     });
 
     it("displays a new set of images", async () => {
-      expect(app.find("img").html()).toContain("1.png");
-      app
+      expect(page.find("img").html()).toContain("1.png");
+      page
         .findAll("button")
         .at(2)
         .trigger("click");
       await Vue.nextTick();
-      expect(app.find("img").html()).toContain("2.png");
+      expect(page.find("img").html()).toContain("2.png");
     });
     it("hides the next button again", async () => {
-      expect(app.text()).toContain("Next");
-      app
+      expect(page.text()).toContain("Next");
+      page
         .findAll("button")
         .at(2)
         .trigger("click");
       await Vue.nextTick();
-      expect(app.text()).not.toContain("Next");
+      expect(page.text()).not.toContain("Next");
     });
     it("hides the results again", async () => {
-      expect(app.text()).toContain("votes");
-      app
+      expect(page.text()).toContain("votes");
+      page
         .findAll("button")
         .at(2)
         .trigger("click");
       await Vue.nextTick();
-      expect(app.text()).not.toContain("votes");
+      expect(page.text()).not.toContain("votes");
     });
   });
 
   describe("when voting fails", () => {
-    let app;
+    let page;
     beforeEach(async () => {
       const voteService = {
         voteForImage: () => {
@@ -176,7 +176,7 @@ describe("App", () => {
           return [{ id: matchupServiceCalls }, { id: matchupServiceCalls }];
         }
       };
-      app = mount(App, {
+      page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
@@ -184,17 +184,17 @@ describe("App", () => {
       });
     });
     it("enables the vote buttons and hides the success spinner", async () => {
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       expect(buttons.at(0).html()).not.toContain("disabled");
       expect(buttons.at(1).html()).not.toContain("disabled");
-      expect(app.find(".loadingSpinner").exists()).toBeFalsy();
+      expect(page.find(".loadingSpinner").exists()).toBeFalsy();
     });
   });
 
   describe("while the vote is being processed", () => {
-    let app;
+    let page;
     let finishVoting;
     const voteServiceResult = { mockId1: 3, mockId2: 5 };
     beforeEach(async () => {
@@ -213,7 +213,7 @@ describe("App", () => {
           return [{ id: matchupServiceCalls }, { id: matchupServiceCalls }];
         }
       };
-      app = mount(App, {
+      page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
@@ -222,7 +222,7 @@ describe("App", () => {
     });
 
     it("disables vote buttons, which don't enable until the next button is pressed", async () => {
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       expect(buttons.at(0).html()).not.toContain("disabled");
       expect(buttons.at(1).html()).not.toContain("disabled");
       buttons.at(0).trigger("click");
@@ -234,7 +234,7 @@ describe("App", () => {
       await Vue.nextTick();
       expect(buttons.at(0).html()).toContain("disabled");
       expect(buttons.at(1).html()).toContain("disabled");
-      app
+      page
         .findAll("button")
         .at(2)
         .trigger("click");
@@ -243,46 +243,46 @@ describe("App", () => {
       expect(buttons.at(1).html()).not.toContain("disabled");
     });
     it("displays a loding spinner", async () => {
-      expect(app.find(".loadingSpinner").exists()).toBeFalsy();
-      app
+      expect(page.find(".loadingSpinner").exists()).toBeFalsy();
+      page
         .findAll("button")
         .at(0)
         .trigger("click");
       await Vue.nextTick();
-      expect(app.find(".loadingSpinner").exists()).toBeTruthy();
+      expect(page.find(".loadingSpinner").exists()).toBeTruthy();
       finishVoting(voteServiceResult);
       await Vue.nextTick();
       await Vue.nextTick();
-      expect(app.find(".loadingSpinner").exists()).toBeFalsy();
+      expect(page.find(".loadingSpinner").exists()).toBeFalsy();
     });
   });
 
   describe("when voting is successful", () => {
-    let app;
+    let page;
     beforeEach(async () => {
       const voteService = {
         voteForImage: () => {
           return Promise.resolve({ mockId1: 3, mockId2: 7 });
         }
       };
-      app = mount(App, {
+      page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService,
           voteService
         }
       });
 
-      const buttons = app.findAll("button");
+      const buttons = page.findAll("button");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       await Vue.nextTick();
     });
 
     it("displays the next button", () => {
-      expect(app.text()).toContain("Next");
+      expect(page.text()).toContain("Next");
     });
     it("displays the percentage of people that voted for each image", () => {
-      const voteButtons = app.findAll(".voteButton");
+      const voteButtons = page.findAll(".voteButton");
       expect(voteButtons.at(0).text()).toContain("30%");
       expect(voteButtons.at(1).text()).toContain("70%");
     });
@@ -298,9 +298,9 @@ describe("App", () => {
       }
     };
 
-    let app;
+    let page;
     beforeEach(() => {
-      app = mount(App, {
+      page = mount(VotingPage, {
         propsData: {
           injectedMatchupService: matchupService
         }
@@ -308,12 +308,12 @@ describe("App", () => {
     });
 
     it("displays the images", () => {
-      const images = app.findAll("img");
+      const images = page.findAll("img");
       expect(images.at(0).html()).toContain("mockId1.png");
       expect(images.at(1).html()).toContain("mockId2.png");
     });
     it("includes links to the videos", () => {
-      const links = app.findAll("a");
+      const links = page.findAll("a");
 
       expect(links.at(0).text()).toContain("Title 1");
       expect(links.at(0).html()).toContain("link-1");
