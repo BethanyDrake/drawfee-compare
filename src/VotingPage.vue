@@ -22,10 +22,12 @@
       </div>
       <div class="row voteButtonRow">
         <div class="rowItem">
-          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(0)">{{voteButtonText[0]}}</button>
+          <button class="voteButton" :disabled='voteSubmitted'
+            v-on:click="voteForImage(0)">{{voteButtonText[0]}}</button>
         </div>
         <div class="rowItem">
-          <button class="voteButton" :disabled='voteSubmitted' v-on:click="voteForImage(1)">{{voteButtonText[1]}}</button>
+          <button class="voteButton" :disabled='voteSubmitted'
+            v-on:click="voteForImage(1)">{{voteButtonText[1]}}</button>
         </div>
       </div>
     </div>
@@ -35,11 +37,12 @@
         <p id="submittingVoteText">Submitting vote...</p>
       </div>
     </div>
-    <p>
-      {{message}}
-    </p>
-    <button id="viewResultsButton" v-on:click='onViewResults'>Results</button>
-    <button id="nextButton" v-if='voteRecieved' v-on:click='nextMatchup'>Next</button>
+    <div id="navigationButtonRow">
+
+      <button id="viewResultsButton" class="secondaryButton" v-on:click='onViewResults'>Results</button>
+      <button id="nextButton" v-on:click='nextMatchup' :disabled='!voteRecieved'>Next</button>
+
+    </div>
   </div>
 </template>
 
@@ -49,12 +52,12 @@
 
 
   const formatPercentage = (n) => {
-    return (n*100).toFixed(0) + "%"
+    return (n * 100).toFixed(0) + "%"
   }
 
   const calculateWinPercentages = (id1, id2, votes) => {
     const totalVotes = votes[id1] + votes[id2];
-    return [formatPercentage(votes[id1]/totalVotes), formatPercentage(votes[id2]/totalVotes)]
+    return [formatPercentage(votes[id1] / totalVotes), formatPercentage(votes[id2] / totalVotes)]
 
   }
 
@@ -69,7 +72,7 @@
         voteSubmitted: false,
         voteRecieved: false,
         voteButtonText: ["Vote", "Vote"],
-        onViewResults: this.goToResultsPage || (() => {}),
+        onViewResults: this.goToResultsPage || (() => { }),
       }
     },
     created: function () {
@@ -177,6 +180,7 @@
     color: white;
   }
 
+
   button:hover {
     background-color: white;
     color: #C01F26;
@@ -216,6 +220,28 @@
     justify-content: center;
   }
 
+  #navigationButtonRow .secondaryButton {
+    background-color: white;
+    color: #C01F26;
+    border-color: white;
+    padding: 0;
+  }
+
+  #navigationButtonRow {
+    padding-top:32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #navigationButtonRow button {
+    padding: 8px 16px;
+    font-size: medium;
+  }
+  .secondaryButton:hover {
+    text-decoration: underline;
+    border-color: white;
+  }
+
   #submittingVoteText {
     font-size: large;
     color: #C01F26;
@@ -246,6 +272,12 @@
       -webkit-transform: rotate(360deg);
       transform: rotate(360deg);
     }
+  }
+
+  .divider {
+    border: 4px solid #C01F26 ;
+    height: 32px;
+    margin: 0 16px;
   }
 
   .row {

@@ -68,7 +68,7 @@ describe("VotingPage", () => {
       expect(voteService.voteForImage).toBeCalledWith("mockId2", "mockId1");
     });
 
-    it("displays how many votes each image has", async () => {
+    it("enables the 'next' button", async () => {
       const voteService = {
         voteForImage: async () => {
           await Promise.resolve();
@@ -81,37 +81,14 @@ describe("VotingPage", () => {
           voteService
         }
       });
-
-      const buttons = page.findAll(".voteButton");
-      buttons.at(0).trigger("click");
-      await Vue.nextTick();
-      await Vue.nextTick();
-
-      expect(page.text()).toContain("mockId1 has 3 votes");
-      expect(page.text()).toContain("mockId2 has 5 votes");
-    });
-
-    it("displays the 'next' button", async () => {
-      const voteService = {
-        voteForImage: async () => {
-          await Promise.resolve();
-          return { mockId1: 3, mockId2: 5 };
-        }
-      };
-      const page = mount(VotingPage, {
-        propsData: {
-          injectedMatchupService: matchupService,
-          voteService
-        }
-      });
-      expect(page.text()).not.toContain("Next");
+      expect(page.find("#nextButton").html()).toContain("disabled");
 
       const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
 
       await Vue.nextTick();
       await Vue.nextTick();
-      expect(page.text()).toContain("Next");
+      expect(page.find("#nextButton").html()).not.toContain("disabled");
     });
   });
   describe("when I vote for an image then click next", () => {
@@ -136,7 +113,6 @@ describe("VotingPage", () => {
           voteService
         }
       });
-      expect(page.text()).not.toContain("Next");
 
       const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
@@ -146,23 +122,16 @@ describe("VotingPage", () => {
 
     it("displays a new set of images", async () => {
       expect(page.find("img").html()).toContain("1.png");
-      console.log(page.html());
       const nextButton = await waitForElement(() => page.find("#nextButton"));
       nextButton.trigger("click");
       await Vue.nextTick();
       expect(page.find("img").html()).toContain("2.png");
     });
-    it("hides the next button again", async () => {
-      expect(page.text()).toContain("Next");
+    it("disables the next button again", async () => {
+      expect(page.find("#nextButton").html()).not.toContain("disabled");
       page.find("#nextButton").trigger("click");
       await Vue.nextTick();
-      expect(page.text()).not.toContain("Next");
-    });
-    it("hides the results again", async () => {
-      expect(page.text()).toContain("votes");
-      page.find("#nextButton").trigger("click");
-      await Vue.nextTick();
-      expect(page.text()).not.toContain("votes");
+      expect(page.find("#nextButton").html()).toContain("disabled");
     });
   });
 
