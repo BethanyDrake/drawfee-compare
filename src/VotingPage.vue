@@ -39,8 +39,8 @@
     </div>
     <div id="navigationButtonRow">
 
-      <button id="viewResultsButton" class="secondaryButton" v-on:click='onViewResults'>Results</button>
-      <button id="nextButton" v-on:click='nextMatchup' :disabled='!voteRecieved'>Next</button>
+      <button id="viewResultsButton" class="secondaryButton" v-on:click='onViewResults'>Results <i class="far fa-clipboard"></i></button>
+      <button id="nextButton" v-on:click='nextMatchup' :disabled='!voteRecieved'>Next <i class="fas fa-arrow-right"></i></button>
 
     </div>
   </div>
