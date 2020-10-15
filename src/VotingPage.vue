@@ -38,7 +38,8 @@
     <p>
       {{message}}
     </p>
-    <button v-if='voteRecieved' v-on:click='nextMatchup'>Next</button>
+    <button id="viewResultsButton" v-on:click='onViewResults'>Results</button>
+    <button id="nextButton" v-if='voteRecieved' v-on:click='nextMatchup'>Next</button>
   </div>
 </template>
 
@@ -59,7 +60,7 @@
 
   export default {
     name: "VotingPage",
-    props: ['injectedMatchupService', 'voteService'],
+    props: ['injectedMatchupService', 'voteService', 'goToResultsPage'],
     data: function () {
       return {
         message: "",
@@ -68,6 +69,7 @@
         voteSubmitted: false,
         voteRecieved: false,
         voteButtonText: ["Vote", "Vote"],
+        onViewResults: this.goToResultsPage || (() => {}),
       }
     },
     created: function () {
@@ -99,7 +101,7 @@
           this.$set(this, 'message', newMessage)
         }).catch((e) => {
           console.error(e)
-          console.log("Could not submit vote.")
+          console.error("Could not submit vote.")
           this.$set(this, 'voteRecieved', false);
           this.$set(this, 'voteSubmitted', false);
         })

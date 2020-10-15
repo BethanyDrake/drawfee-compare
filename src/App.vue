@@ -1,16 +1,28 @@
 <template>
   <div id="app">
-    <VotingPage/>
+    <VotingPage v-if='currentPage=="VotingPage"' :goToResultsPage="goToResultsPage"/>
+    <ResultsPage v-if='currentPage=="ResultsPage"'/>
   </div>
 </template>
 
 <script>
   import VotingPage from "./VotingPage.vue"
-
+  import ResultsPage from "./ResultsPage.vue"
   export default {
     name: "App",
     components: {
       VotingPage,
+      ResultsPage,
+    },
+    data: function() {
+      return {
+        currentPage: "VotingPage"
+      }
+    },
+    methods: {
+      goToResultsPage: function() {
+        this.$set(this, 'currentPage', "ResultsPage")
+      }
     }
   };
 </script>

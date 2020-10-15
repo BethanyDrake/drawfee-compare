@@ -1,6 +1,18 @@
 import { mount } from "@vue/test-utils";
 import VotingPage from "@/VotingPage.vue";
 import Vue from "vue";
+const waitForElement = async findFunction => {
+  let result = findFunction();
+  const maxTries = 10;
+  let tries = 0;
+  while (!result.exists() && tries < maxTries) {
+    await Vue.nextTick();
+    result = findFunction();
+    tries++;
+  }
+  return result;
+};
+
 describe("VotingPage", () => {
   const matchupService = {
     getMatchup: () => {
@@ -14,7 +26,7 @@ describe("VotingPage", () => {
         injectedMatchupService: matchupService
       }
     });
-    const buttons = page.findAll("button");
+    const buttons = page.findAll(".voteButton");
     expect(buttons.length).toEqual(2);
   });
   describe("when I vote for an image", () => {
@@ -30,7 +42,7 @@ describe("VotingPage", () => {
         }
       });
 
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
 
@@ -49,7 +61,7 @@ describe("VotingPage", () => {
         }
       });
 
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(1).trigger("click");
       await Vue.nextTick();
 
@@ -70,7 +82,7 @@ describe("VotingPage", () => {
         }
       });
 
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       await Vue.nextTick();
@@ -94,7 +106,7 @@ describe("VotingPage", () => {
       });
       expect(page.text()).not.toContain("Next");
 
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
 
       await Vue.nextTick();
@@ -126,7 +138,7 @@ describe("VotingPage", () => {
       });
       expect(page.text()).not.toContain("Next");
 
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       await Vue.nextTick();
@@ -134,28 +146,21 @@ describe("VotingPage", () => {
 
     it("displays a new set of images", async () => {
       expect(page.find("img").html()).toContain("1.png");
-      page
-        .findAll("button")
-        .at(2)
-        .trigger("click");
+      console.log(page.html());
+      const nextButton = await waitForElement(() => page.find("#nextButton"));
+      nextButton.trigger("click");
       await Vue.nextTick();
       expect(page.find("img").html()).toContain("2.png");
     });
     it("hides the next button again", async () => {
       expect(page.text()).toContain("Next");
-      page
-        .findAll("button")
-        .at(2)
-        .trigger("click");
+      page.find("#nextButton").trigger("click");
       await Vue.nextTick();
       expect(page.text()).not.toContain("Next");
     });
     it("hides the results again", async () => {
       expect(page.text()).toContain("votes");
-      page
-        .findAll("button")
-        .at(2)
-        .trigger("click");
+      page.find("#nextButton").trigger("click");
       await Vue.nextTick();
       expect(page.text()).not.toContain("votes");
     });
@@ -184,7 +189,7 @@ describe("VotingPage", () => {
       });
     });
     it("enables the vote buttons and hides the success spinner", async () => {
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       expect(buttons.at(0).html()).not.toContain("disabled");
@@ -222,7 +227,7 @@ describe("VotingPage", () => {
     });
 
     it("disables vote buttons, which don't enable until the next button is pressed", async () => {
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       expect(buttons.at(0).html()).not.toContain("disabled");
       expect(buttons.at(1).html()).not.toContain("disabled");
       buttons.at(0).trigger("click");
@@ -234,10 +239,7 @@ describe("VotingPage", () => {
       await Vue.nextTick();
       expect(buttons.at(0).html()).toContain("disabled");
       expect(buttons.at(1).html()).toContain("disabled");
-      page
-        .findAll("button")
-        .at(2)
-        .trigger("click");
+      page.find("#nextButton").trigger("click");
       await Vue.nextTick();
       expect(buttons.at(0).html()).not.toContain("disabled");
       expect(buttons.at(1).html()).not.toContain("disabled");
@@ -245,7 +247,7 @@ describe("VotingPage", () => {
     it("displays a loding spinner", async () => {
       expect(page.find(".loadingSpinner").exists()).toBeFalsy();
       page
-        .findAll("button")
+        .findAll(".voteButton")
         .at(0)
         .trigger("click");
       await Vue.nextTick();
@@ -272,7 +274,7 @@ describe("VotingPage", () => {
         }
       });
 
-      const buttons = page.findAll("button");
+      const buttons = page.findAll(".voteButton");
       buttons.at(0).trigger("click");
       await Vue.nextTick();
       await Vue.nextTick();
@@ -281,7 +283,7 @@ describe("VotingPage", () => {
     it("displays the next button", () => {
       expect(page.text()).toContain("Next");
     });
-    it("displays the percentage of people that voted for each image", () => {
+    it("displays the percentage of people that voted for each image", async () => {
       const voteButtons = page.findAll(".voteButton");
       expect(voteButtons.at(0).text()).toContain("30%");
       expect(voteButtons.at(1).text()).toContain("70%");
