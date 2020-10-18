@@ -1,14 +1,12 @@
 const ResultProcesser = {
-  calculateWinRate: rawData => {
+  calculateWins: function(rawData) {
     const imageIds = [...new Set(rawData.map(matchup => matchup.winner))];
-    console.log(imageIds);
     const scores = imageIds.map(imageId => {
       const relevantData = rawData.filter(
         matchup => matchup.winner === imageId || matchup.loser === imageId
       );
 
       let wins = 0;
-      let losses = 0;
       const defaultMatchup = { voteCount: 0 };
       imageIds.forEach(opponentId => {
         const votesFor = (
@@ -25,16 +23,33 @@ const ResultProcesser = {
           ) || defaultMatchup
         ).voteCount;
         if (votesFor > votesAgainst) wins++;
-        else losses++;
       });
       return {
         imageId,
-        score: wins / (wins + losses)
+        wins
       };
     });
-    scores.sort((a, b) => a.score - b.score);
-
+    scores.sort((a, b) => b.wins - a.wins);
     return scores;
+  },
+
+  getTop: function(rawData, n, imageService) {
+    const numberOfMatchups =
+      new Set(
+        rawData
+          .map(matchup => matchup.winner)
+          .concat(rawData.map(matchup => matchup.loser))
+      ).size - 1;
+
+    return this.calculateWins(rawData)
+      .slice(0, n)
+      .map(entry => {
+        const imageData = imageService.getImageData(entry.imageId);
+        return {
+          ...imageData,
+          winRate: entry.wins / numberOfMatchups
+        };
+      });
   }
 };
 

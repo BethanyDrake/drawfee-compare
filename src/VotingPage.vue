@@ -108,8 +108,6 @@
           this.$set(this, 'voteRecieved', false);
           this.$set(this, 'voteSubmitted', false);
         })
-
-
       },
       getImgUrl: (id) => {
         let imageContext;

@@ -77,6 +77,9 @@ class MatchupService {
   getMatchup = () => {
     return [randomElement(images), randomElement(images)];
   };
+  getImageData = imageId => {
+    return images.find(element => element.id === imageId);
+  };
 }
 
 export default MatchupService;

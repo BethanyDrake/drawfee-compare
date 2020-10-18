@@ -1,4 +1,6 @@
-class VoteService {
+import resultProcesser from "@/ResultProcesser.js";
+import MatchupService from "./MatchupService.js";
+class ResultsService {
   getResults = () => {
     let resolve;
     let reject;
@@ -14,7 +16,12 @@ class VoteService {
       if (this.readyState === 4) {
         try {
           const parsedResponse = JSON.parse(this.responseText);
-          resolve(parsedResponse);
+          const top10 = resultProcesser.getTop(
+            parsedResponse,
+            10,
+            new MatchupService()
+          );
+          resolve(top10);
         } catch {
           reject();
         }
@@ -37,4 +44,4 @@ class VoteService {
     return promise;
   };
 }
-export default VoteService;
+export default ResultsService;
