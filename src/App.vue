@@ -4,7 +4,7 @@
       Drawfee Royale
     </h1>
     <VotingPage v-if='currentPage=="VotingPage"' :goToResultsPage="goToResultsPage"/>
-    <ResultsPage v-if='currentPage=="ResultsPage"'/>
+    <ResultsPage v-if='currentPage=="ResultsPage"' :goToVotingPage="goToVotingPage"/>
   </div>
 </template>
 
@@ -25,6 +25,9 @@
     methods: {
       goToResultsPage: function() {
         this.$set(this, 'currentPage', "ResultsPage")
+      },
+      goToVotingPage: function() {
+        this.$set(this, 'currentPage', "VotingPage")
       }
     }
   };

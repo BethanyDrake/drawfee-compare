@@ -1,5 +1,9 @@
 <template>
   <div id="resultsPage">
+    <div id="subheaderRow">
+      <h2>Results: </h2>
+      <button id="backToVotingButton"  v-on:click='onBackToVoting'>Back to Voting</button>
+    </div>
 
    <div class="result" v-for="(entry, index) in results" :key="entry.id">
      <img :src="getImgUrl(entry.id)">
@@ -16,7 +20,7 @@
 
   export default {
     name: "ResultsPage",
-    props: ["injectedResultsService"],
+    props: ["injectedResultsService", "goToVotingPage"],
     created: function() {
       const resultsService = this.injectedResultsService || new ResultsService()
       resultsService.getResults().then(results => {
@@ -26,6 +30,7 @@
     data: function() {
       return {
         results: "",
+        onBackToVoting: this.goToVotingPage || (() => {}),
       }
     },
     components: {
@@ -46,7 +51,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .result {
     text-align: left;
     display: flex;
@@ -64,6 +69,18 @@
     -1px 1px 2px #C01F26,
      1px 1px 2px #C01F26;
 
+  }
+
+  #subheaderRow {
+    display: flex;
+    margin: 16px;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: medium;
   }
 
 
