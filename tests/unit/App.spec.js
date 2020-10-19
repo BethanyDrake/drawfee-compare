@@ -26,9 +26,9 @@ describe("App", () => {
         await Vue.nextTick();
         expect(app.findComponent(ResultsPage).exists()).toBeTruthy();
         app.find("#backToVotingButton").trigger("click");
-        Vue.nextTick();
+        await Vue.nextTick();
         expect(app.findComponent(ResultsPage).exists()).toBeFalsy();
-        expect(app.findComponent(ResultsPage).exists()).toBeTruthy();
+        expect(app.findComponent(VotingPage).exists()).toBeTruthy();
       });
     });
   });
