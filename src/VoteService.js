@@ -22,6 +22,7 @@ class VoteService {
           const parsedResponse = JSON.parse(this.responseText);
           resolve(parsedResponse);
         } catch {
+          alert("Error: unable to submit vote.");
           reject();
         }
       }
