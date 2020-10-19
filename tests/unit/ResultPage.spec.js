@@ -3,6 +3,21 @@ import ResultsPage from "@/ResultsPage.vue";
 import Vue from "vue";
 
 describe("ResultPage", () => {
+  it("displays loading spinner while waiting for results", async () => {
+    const resultsService = {
+      getResults: () => new Promise(_ => {})
+    };
+    const page = mount(ResultsPage, {
+      propsData: {
+        injectedResultsService: resultsService
+      }
+    });
+
+    expect(page.text()).toContain("Getting results...");
+
+    expect(page.find(".loadingSpinner").exists()).toBeTruthy();
+  });
+
   it("displays whatever the resultsService gives it", async () => {
     const results = [
       {
