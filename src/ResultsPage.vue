@@ -1,6 +1,9 @@
 <template>
   <div id="resultsPage">
-    {{JSON.stringify(results)}}
+   <div v-for="entry in results" :key="entry.id">
+     <img :src="getImgUrl(entry.id)">
+     <a :href="entry.videoUrl">{{entry.videoTitle}}</a>
+   </div>
   </div>
 </template>
 
@@ -22,6 +25,19 @@
       }
     },
     components: {
+    },
+    methods: {
+      getImgUrl: (id) => {
+        let imageContext;
+        try {
+          imageContext = require.context('./images/', false, /\.png$/)
+        } catch (error) {
+          console.warn("Failed to get context")
+          imageContext = (s) => s
+        }
+
+        return imageContext('./' + id + ".png")
+      }
     }
   };
 </script>
