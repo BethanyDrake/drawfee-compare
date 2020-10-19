@@ -170,6 +170,9 @@
     display: flex;
     flex-direction: column;
     margin: 0 16px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 
   }
 
