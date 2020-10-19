@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <h1>
+      Drawfee Royale
+    </h1>
     <VotingPage v-if='currentPage=="VotingPage"' :goToResultsPage="goToResultsPage"/>
     <ResultsPage v-if='currentPage=="ResultsPage"'/>
   </div>
@@ -34,5 +37,26 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+  }
+  @font-face {
+    font-family: "FlamanteSans";
+    src: local("FlamanteSans"),
+      url(./fonts/FlamanteSans/Flamante-Sans-Bold-FFP.ttf) format("truetype");
+  }
+
+  body {
+    margin: 0;
+  }
+
+  h1 {
+    background-color: #C01F26;
+    color: white;
+    margin: 0;
+    padding: 16px;
+    padding-top: 32px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: "FlamanteSans";
+    font-size: xxx-large;
   }
 </style>

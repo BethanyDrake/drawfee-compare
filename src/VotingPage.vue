@@ -1,8 +1,5 @@
 <template>
   <div id="votingPage">
-    <h1>
-      Drawfee Royale
-    </h1>
     <div id="imageComparisonContainer">
       <div class="row">
         <p class="rowItem">
@@ -127,28 +124,6 @@
 </script>
 
 <style>
-  @font-face {
-    font-family: "FlamanteSans";
-    src: local("FlamanteSans"),
-      url(./fonts/FlamanteSans/Flamante-Sans-Bold-FFP.ttf) format("truetype");
-  }
-
-  body {
-    margin: 0;
-  }
-
-  h1 {
-    background-color: #C01F26;
-    color: white;
-    margin: 0;
-    padding: 16px;
-    padding-top: 32px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-family: "FlamanteSans";
-    font-size: xxx-large;
-  }
-
   .voteButtonRow {
     margin-top: -32px;
   }
