@@ -1,8 +1,12 @@
 <template>
   <div id="resultsPage">
-   <div v-for="entry in results" :key="entry.id">
+
+   <div class="result" v-for="(entry, index) in results" :key="entry.id">
      <img :src="getImgUrl(entry.id)">
-     <a :href="entry.videoUrl">{{entry.videoTitle}}</a>
+     <div>
+     <div class="ranking">#{{index+1}}</div>
+     From episode: <a :href="entry.videoUrl">{{entry.videoTitle}}</a>
+    </div>
    </div>
   </div>
 </template>
@@ -43,4 +47,28 @@
 </script>
 
 <style>
+  .result {
+    text-align: left;
+    display: flex;
+    margin: 16px;
+  }
+
+  .result .ranking{
+    font-weight: bold;
+    font-size: lager;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow:
+   -1px -1px 2px #C01F26,
+    1px -1px 2px #C01F26,
+    -1px 1px 2px #C01F26,
+     1px 1px 2px #C01F26;
+
+  }
+
+
+  .result img{
+    margin-right: 16px;
+  }
+
 </style>

@@ -46,5 +46,10 @@ describe("ResultPage", () => {
     expect(links.at(0).text()).toContain("Title A");
     expect(links.at(1).text()).toContain("Title B");
     expect(links.at(2).text()).toContain("Title C");
+
+    const text = page.text();
+    expect(text).toContain("#1");
+    expect(text).toContain("#2");
+    expect(text).toContain("#3");
   });
 });
