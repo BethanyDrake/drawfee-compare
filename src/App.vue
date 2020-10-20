@@ -5,6 +5,9 @@
     </h1>
     <VotingPage v-if='currentPage=="VotingPage"' :goToResultsPage="goToResultsPage"/>
     <ResultsPage v-if='currentPage=="ResultsPage"' :goToVotingPage="goToVotingPage"/>
+    <div id="footerPadding"><i class="fa fa-exclamation-circle"></i> Report an issue</div>
+
+    <a id="reportAnIssue" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSejOihxHxDWHWZthvxdX3KPpxu7tNo0CFTYWE8GU0fIL6Gkfg/viewform?usp=sf_link"><i class="fa fa-exclamation-circle"></i> Report an issue</a>
   </div>
 </template>
 
@@ -61,5 +64,19 @@
     letter-spacing: 2px;
     font-family: "FlamanteSans";
     font-size: xxx-large;
+  }
+
+  #footerPadding {
+    color: white;
+  }
+
+  #reportAnIssue {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    color: #C01F26;
+    background-color: white;
+    padding-right: 8px;
+    border-top-right-radius: 3px;
   }
 </style>
